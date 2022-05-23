@@ -59,18 +59,19 @@ class Solution
             return 0;
         });
         
-        int currWeight = 0;
-        double ans = 0;
-        for(Item item:arr){
-            if(currWeight + item.weight<=W){
-                currWeight += item.weight;
-                ans += item.value;
+        double value = 0;
+        int currWt = 0;
+        for(int i=0;i<n;i++){
+            if(currWt + arr[i].weight <= W){
+                currWt += arr[i].weight;
+                value += arr[i].value;
             }else{
-                int remainCapacity = W - currWeight;
-                ans+= ((double)(item.value)/(double)(item.weight)) * remainCapacity;
+                int remain = W - currWt;
+                double fraction = ((double)arr[i].value/(double)arr[i].weight) * remain;
+                value += fraction;
                 break;
             }
         }
-        return ans;
+        return value;
     }
 }
