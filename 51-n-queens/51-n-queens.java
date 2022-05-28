@@ -5,12 +5,16 @@ class Solution {
         for(char[] row:board){
             Arrays.fill(row,'.');
         }
+        boolean[] leftRow = new boolean[n];
+        boolean[] leftBottom = new boolean[2*n-1];
+        boolean[] leftTop = new boolean[2*n-1];
         
-        solve(0,board,ans);
+        solve(0,board,ans,leftRow,leftBottom,leftTop);
         return ans;
     }
     
-    private void solve(int col,char[][] board,List<List<String>> ans){
+    private void solve(int col,char[][] board,List<List<String>> ans,boolean[] leftRow,boolean[] leftBottom,boolean[] leftTop){
+        int n = board.length;
         if(col == board.length){
             List<String> boardCopy = new ArrayList<>();
             for(int i=0;i<board.length;i++){
@@ -26,46 +30,23 @@ class Solution {
         }
         
         for(int row=0;row<board.length;row++){
-            if(isSafe(row,col,board)){
+            if(leftRow[row] == false && leftBottom[row+col] == false && leftTop[n-1 + row - col] == false){
                 board[row][col] = 'Q';
-                solve(col+1,board,ans);
+                leftRow[row] = true;
+                leftBottom[row+col] = true;
+                leftTop[n-1 + row - col] = true;
+                
+                
+                solve(col+1,board,ans,leftRow,leftBottom,leftTop);
+                
                 board[row][col] = '.';
+                leftRow[row] = false;
+                leftBottom[row+col] = false;
+                leftTop[n-1 + row - col] = false;
             }
         }
         
     }
     
-    private boolean isSafe(int row,int col,char[][] board){
-        int dupRow = row,dupCol = col;
-        
-        //left top diagonal
-        while(row>=0 && col>=0){
-            if(board[row][col] == 'Q'){
-                return false;
-            }
-            row--;
-            col--;
-        }
-        
-        row = dupRow;col = dupCol;
-        //left side in row
-        while(col>=0){
-            if(board[row][col] == 'Q'){
-                return false;
-            }
-            col--;
-        }
-        
-        row = dupRow;col = dupCol;
-        //left bottom diagonal
-        while(row<board.length && col>=0){
-            if(board[row][col] == 'Q'){
-                return false;
-            }
-            row++;
-            col--;
-        }
-        
-        return true;
-    }
+    
 }
