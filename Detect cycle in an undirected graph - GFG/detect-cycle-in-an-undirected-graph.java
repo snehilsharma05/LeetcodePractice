@@ -38,7 +38,7 @@ class Solution {
         boolean[] visited = new boolean[N];
         for(int v=0;v<N;v++){
             if(!visited[v]){
-                if(bfs(v,adj,visited)){
+                if(dfs(v,-1,adj,visited)){
                     return true;
                 }
             }
@@ -46,22 +46,16 @@ class Solution {
         return false;
     }
     
-    private boolean bfs(int node,ArrayList<ArrayList<Integer>> adj,boolean[] visited){
+    private boolean dfs(int node,int parent, ArrayList<ArrayList<Integer>> adj,boolean[] visited){
         
-        //remove mark* w add*
-        Queue<Integer> q = new LinkedList<>();
-        q.add(node);
-        while(!q.isEmpty()){
-            int curr = q.poll();
-            if(visited[curr]){
-                return true;
-            }
-            
-            visited[curr] = true;
-            for(int nbr:adj.get(curr)){
-                if(!visited[nbr]){
-                    q.add(nbr);
+        visited[node] = true;
+        for(int nbr:adj.get(node)){
+            if(!visited[nbr]){
+                if(dfs(nbr,node,adj,visited)){
+                    return true;
                 }
+            }else if(nbr != parent){
+                return true;
             }
         }
         return false;
