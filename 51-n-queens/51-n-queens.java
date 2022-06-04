@@ -5,48 +5,55 @@ class Solution {
         for(char[] row:board){
             Arrays.fill(row,'.');
         }
-        boolean[] leftRow = new boolean[n];
-        boolean[] leftBottom = new boolean[2*n-1];
-        boolean[] leftTop = new boolean[2*n-1];
         
-        solve(0,board,ans,leftRow,leftBottom,leftTop);
+        solve(0,board,ans);
         return ans;
     }
-    
-    private void solve(int col,char[][] board,List<List<String>> ans,boolean[] leftRow,boolean[] leftBottom,boolean[] leftTop){
-        int n = board.length;
+    private void solve(int col,char[][] board,List<List<String>> ans){
         if(col == board.length){
-            List<String> boardCopy = new ArrayList<>();
-            for(int i=0;i<board.length;i++){
-                StringBuilder sb = new StringBuilder();
-                for(int j=0;j<board.length;j++){
-                    sb.append(board[i][j]);
-                }
-                boardCopy.add(sb.toString());
+            List<String> copyBoard = new ArrayList<>();
+            for(char[] row:board){
+                String str = new String(row);
+                copyBoard.add(str);
             }
-            
-            ans.add(boardCopy);
+            ans.add(copyBoard);
             return;
         }
         
         for(int row=0;row<board.length;row++){
-            if(leftRow[row] == false && leftBottom[row+col] == false && leftTop[n-1 + row - col] == false){
+            if(isPossible(board,row,col)){
                 board[row][col] = 'Q';
-                leftRow[row] = true;
-                leftBottom[row+col] = true;
-                leftTop[n-1 + row - col] = true;
-                
-                
-                solve(col+1,board,ans,leftRow,leftBottom,leftTop);
-                
+                solve(col+1,board,ans);
                 board[row][col] = '.';
-                leftRow[row] = false;
-                leftBottom[row+col] = false;
-                leftTop[n-1 + row - col] = false;
             }
         }
-        
     }
-    
-    
+    private boolean isPossible(char[][] board,int row,int col){
+        int rowDup = row,colDup = col;
+        
+        while(row>=0 && col>=0){
+            if(board[row][col] == 'Q'){
+                return false;
+            }    
+            row--;
+            col--;
+        }
+        
+        row = rowDup; col = colDup;
+        while(row<board.length && col>=0){
+            if(board[row][col] == 'Q'){
+                return false;
+            }
+            row++;
+            col--;
+        }
+        row = rowDup; col = colDup;
+        while(col>=0){
+            if(board[row][col] == 'Q'){
+                return false;
+            }
+            col--;
+        }
+        return true;
+    }
 }
