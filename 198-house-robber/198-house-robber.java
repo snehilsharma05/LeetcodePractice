@@ -1,10 +1,20 @@
 class Solution {
     public int rob(int[] nums) {
         int n = nums.length;
-        int[] dp = new int[n];
-        Arrays.fill(dp,-1);
         
-        return maxAmount(n-1,nums,dp);
+        int prev = nums[0],prev2 = 0;
+        
+        for(int index=1;index<n;index++){
+            int pick = nums[index] + prev2;    
+            int notPick = 0 + prev;
+            int curr = Math.max(pick,notPick);
+            
+            prev2 = prev;
+            prev = curr;
+        }
+        
+        return prev;
+        //return maxAmount(n-1,nums,dp);
     }
     
     private int maxAmount(int index,int[] nums,int[] dp){
