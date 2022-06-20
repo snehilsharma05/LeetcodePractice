@@ -1,21 +1,34 @@
+class TrieNode{
+    Map<Character,TrieNode> next = new HashMap<>();
+    int depth;
+}
 class Solution {
     public int minimumLengthEncoding(String[] words) {
-        Set<String> set = new HashSet<>();
-        for(String word:words){
-            set.add(word);
-        }
+        TrieNode root = new TrieNode();
+        List<TrieNode> leaves = new ArrayList<>();
+        Set<String> noDupWords = new HashSet<>(Arrays.asList(words));
         
-        for(String word:words){
-            for(int i=1;i<word.length();i++){
-                set.remove(word.substring(i)); //remove all suffixes from set
+        for(String word:noDupWords){
+            TrieNode curr = root;
+            for(int i=word.length()-1;i>=0;i--){
+                char ch = word.charAt(i);
+                if(!curr.next.containsKey(ch)){
+                    curr.next.put(ch,new TrieNode());
+                }
+                
+                curr = curr.next.get(ch);
             }
+            
+            curr.depth = word.length()+1;
+            leaves.add(curr);
         }
         
         int length = 0;
-        for(String word:set){
-            length += word.length() + 1; //1 for #
+        for(TrieNode leaf:leaves){
+            if(leaf.next.isEmpty()){
+                length += leaf.depth;
+            }
         }
-        
         return length;
     }
 }
