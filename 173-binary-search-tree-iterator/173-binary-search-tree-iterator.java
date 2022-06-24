@@ -25,8 +25,9 @@ class BSTIterator {
             TreeNode curr = s.pop();
             pushAll(curr.right);
             return curr.val;
+        }else{
+            return -1;
         }
-        return -1;
     }
     
     public boolean hasNext() {
