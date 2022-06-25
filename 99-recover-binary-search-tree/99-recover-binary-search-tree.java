@@ -14,38 +14,40 @@
  * }
  */
 class Solution {
-    private class Index{
-        int index = 0;
-    }
+    
+    private TreeNode prev, first,middle,second;
     public void recoverTree(TreeNode root) {
-        if(root == null){
-            return;
+        inorder(root);
+        int temp;
+        if(first!= null && second != null){
+            temp = first.val;
+            first.val = second.val;
+            second.val = temp;
+        }else{
+            temp = first.val;
+            first.val = middle.val;
+            middle.val = temp;
         }
-        
-        List<Integer> inorder = new ArrayList<>();
-        storeInorder(root,inorder);
-        Collections.sort(inorder);
-        
-        Index index = new Index();
-        backToTree(root,inorder,index);
     }
-    private void storeInorder(TreeNode root,List<Integer> inorder){
+    private void inorder(TreeNode root){
         if(root == null){
             return;
         }
         
-        storeInorder(root.left,inorder);
-        inorder.add(root.val);
-        storeInorder(root.right,inorder);
+        inorder(root.left);
+        
+        if(prev != null && prev.val > root.val){
+            if(first == null){
+                first = prev;
+                middle = root;
+            }else{
+                second = root;
+            }
+        }
+        prev = root;
+        
+        
+        inorder(root.right);
     }
     
-    private void backToTree(TreeNode root,List<Integer> inorder,Index index){
-        if(root == null){
-            return;
-        }
-        
-        backToTree(root.left,inorder,index);
-        root.val = inorder.get(index.index++);
-        backToTree(root.right,inorder,index);
-    }
 }
