@@ -122,11 +122,12 @@ class Solution{
             this.size = size;
         }
     }
+    
     static int largestBst(Node root)
     {
         // Write your code here
-        return helper(root).size;
         
+        return helper(root).size;
     }
     private static NodeValue helper(Node root){
         if(root == null){
@@ -135,9 +136,10 @@ class Solution{
         
         NodeValue left = helper(root.left);
         NodeValue right = helper(root.right);
+        
         if(left.largest<root.data && root.data<right.smallest){
             return new NodeValue(Math.min(left.smallest,root.data),Math.max(right.largest,root.data),
-                                    left.size + right.size + 1);
+                                left.size + right.size + 1);
         }else{
             return new NodeValue(Integer.MIN_VALUE,Integer.MAX_VALUE,Math.max(left.size,right.size));
         }
