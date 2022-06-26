@@ -6,19 +6,19 @@ class MyQueue {
     }
     
     public void push(int x) {
-        while(!s1.isEmpty()){
-            s2.push(s1.pop());
-        }
-        
-        s1.push(x);
-        while(!s2.isEmpty()){
-            s1.push(s2.pop());
-        }
+        s2.push(x);
     }
     
     public int pop() {
         if(!empty()){
-            return s1.pop();
+            if(!s1.isEmpty()){
+                return s1.pop();
+            }else{
+                while(!s2.isEmpty()){
+                    s1.push(s2.pop());
+                }
+                return s1.pop();
+            }
         }else{
             return -1;
         }
@@ -26,14 +26,21 @@ class MyQueue {
     
     public int peek() {
         if(!empty()){
-            return s1.peek();
+            if(!s1.isEmpty()){
+                return s1.peek();
+            }else{
+                while(!s2.isEmpty()){
+                    s1.push(s2.pop());
+                }
+                return s1.peek();
+            }
         }else{
             return -1;
         }
     }
     
     public boolean empty() {
-        return s1.isEmpty();
+        return s1.isEmpty() && s2.isEmpty();
     }
 }
 
