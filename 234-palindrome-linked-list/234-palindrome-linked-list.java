@@ -13,21 +13,34 @@ class Solution {
         if(head == null || head.next == null){
             return true;
         }
-        Stack<Integer> s = new Stack<>();
-        ListNode curr = head;
         
-        while(curr != null){
-            s.push(curr.val);
-            curr = curr.next;
+        ListNode slow = head, fast = head;
+        while(fast.next != null && fast.next.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
         }
         
-        curr = head;
-        while(curr != null){
-            if(s.pop() != curr.val){
+        slow.next = reverse(slow.next);
+        fast = head;
+        slow = slow.next;
+        while(slow != null){
+            if(slow.val != fast.val){
                 return false;
             }
-            curr = curr.next;
+            slow = slow.next;
+            fast = fast.next;
         }
         return true;
+    }
+    
+    private ListNode reverse(ListNode node){
+        ListNode prev = null,curr = node,next = null;
+        while(curr != null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
     }
 }
