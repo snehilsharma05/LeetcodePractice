@@ -1,43 +1,47 @@
 class MinStack {
-    private class Pair{
-        int val,min;
-        Pair(int val,int min){
-            this.val = val;
-            this.min = min;
-        }
-    }
+    private long mini = (int)1e10;
     
-    Stack<Pair> s;
+    Stack<Long> s;
     public MinStack() {
         s = new Stack<>();
     }
     
     public void push(int val) {
         if(s.isEmpty()){
-            s.push(new Pair(val,val));
-        }else{
-            s.push(new Pair(val,Math.min(s.peek().min,val)));
+            s.push((long)val);
+            mini = val;
+        }else if((long)val >= mini){
+            s.push((long)val);
+        }else if((long)val < mini){
+            s.push((long)2*val - mini); //will always be less than val
+            mini = val;
         }
     }
     
     public void pop() {
-        s.pop();
+        if(!s.isEmpty()){
+            if(s.peek()>=mini){
+                s.pop();
+            }else if(s.peek() < mini){ //this was a modified value, let's come back to prev min
+                mini = 2*mini - s.pop();
+            }
+        }
     }
     
     public int top() {
-        if(s.isEmpty()){
-            return -1;
-        }else{
-            return s.peek().val;
+        if(!s.isEmpty()){
+            if(s.peek()<=mini){ //mini is the topmost value
+                return (int)mini;
+            }else{
+                long peekedVal =  (s.peek());
+                return (int)peekedVal;
+            }
         }
+        return -1;
     }
     
     public int getMin() {
-        if(s.isEmpty()){
-            return -1;
-        }else{
-            return s.peek().min;
-        }
+        return (int)mini;
     }
 }
 
