@@ -2,9 +2,14 @@ class Solution {
     public int rob(int[] nums) {
         int n = nums.length;
         int[] dp = new int[n];
-        Arrays.fill(dp,-1);
-        
-        return collectAmount(n-1,nums,dp);
+        dp[0] = nums[0];
+        for(int index=1;index<n;index++){
+            int notPick = dp[index-1];
+            int pick = nums[index] + ((index<2) ? 0 : dp[index-2]);
+            dp[index] = Math.max(pick,notPick);
+        }
+        return dp[n-1];
+        //return collectAmount(n-1,nums,dp);
     }
     
     private int collectAmount(int index,int[] nums,int[] dp){
