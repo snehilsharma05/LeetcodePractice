@@ -1,11 +1,11 @@
 class Solution {
     public String longestPalindrome(String s) {
         int n = s.length();
-        boolean[][] dp = new boolean[n+1][n+1];
-        int posI = 0,posJ = 0;
+        boolean[][] dp = new boolean[n][n];
+        int start = 0,end = 0;
         
         for(int g=0;g<n;g++){
-            for(int i=0,j = g;j<n;i++,j++){
+            for(int i=0,j=g;j<n;i++,j++){
                 if(g == 0){
                     dp[i][j] = true;
                 }else if(g == 1){
@@ -17,11 +17,19 @@ class Solution {
                 }
                 
                 if(dp[i][j]){
-                    posI = i;
-                    posJ = j;
+                    start = i;
+                    end = j;
                 }
             }
         }
-        return s.substring(posI,posJ+1);
+        
+        // for(int i=0;i<n;i++){
+        //     for(int j=0;j<n;j++){
+        //         System.out.print(dp[i][j]+" ");
+        //     }
+        //     System.out.println();
+        // }
+        // System.out.print(start+" "+end);
+        return s.substring(start,end+1);
     }
 }
