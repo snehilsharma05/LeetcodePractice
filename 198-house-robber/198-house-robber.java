@@ -1,28 +1,17 @@
 class Solution {
     public int rob(int[] nums) {
         int n = nums.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp,-1);
         
-        int prev = nums[0],prev2 = 0;
-        
-        for(int index=1;index<n;index++){
-            int pick = nums[index] + prev2;    
-            int notPick = 0 + prev;
-            int curr = Math.max(pick,notPick);
-            
-            prev2 = prev;
-            prev = curr;
-        }
-        
-        return prev;
-        //return maxAmount(n-1,nums,dp);
+        return collectAmount(n-1,nums,dp);
     }
     
-    private int maxAmount(int index,int[] nums,int[] dp){
+    private int collectAmount(int index,int[] nums,int[] dp){
         if(index == 0){
-            return nums[0];
+            return nums[index];
         }
-        
-        if(index < 0){
+        if(index<0){
             return 0;
         }
         
@@ -30,9 +19,9 @@ class Solution {
             return dp[index];
         }
         
-        int pick = nums[index] + maxAmount(index-2,nums,dp);
-        int notPick = 0 + maxAmount(index-1,nums,dp);
-        
+        int notPick = collectAmount(index-1,nums,dp);
+        int pick = nums[index] + collectAmount(index-2,nums,dp);
         return dp[index] = Math.max(pick,notPick);
+        
     }
 }
