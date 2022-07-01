@@ -4,45 +4,44 @@ class Solution {
         for(int num:nums){
             sum += num;
         }
+        
         if(sum % 2 != 0){
             return false;
+        }else{
+            int n = nums.length;
+            int[][] dp = new int[n][sum/2+1];
+            for(int[] row:dp){
+                Arrays.fill(row,-1);
+            }
+            
+            return subsetSum(n-1,sum/2,nums,dp) == 1;
         }
-        
-        int n = nums.length;
-        int[][] dp = new int[n+1][sum+1];
-        for(int[] row:dp){
-            Arrays.fill(row,-1);
-        }
-        
-        return isPossible(n-1,sum/2,nums,dp);
     }
-    private boolean isPossible(int index,int target,int[] nums,int[][] dp){
+    private int subsetSum(int index,int target,int[] nums,int[][] dp){
         if(target == 0){
-            return true;
+            return 1;
         }
         
         if(index == 0){
-            return nums[index] == target;
+            return nums[index] == target ? 1: 0;
         }
         
         if(dp[index][target] != -1){
-            return dp[index][target] == 1;
+            return dp[index][target];
         }
         
-        
-        boolean notTake = isPossible(index-1,target,nums,dp);
-        boolean take = false;
-        if(target>=nums[index]){
-            take = isPossible(index-1,target - nums[index],nums,dp);
+        int notTake = subsetSum(index-1,target,nums,dp);
+        int take = 0;
+        if(nums[index]<=target){
+            take = subsetSum(index-1,target - nums[index],nums,dp);
         }
         
-        
-        if(take || notTake){
-             dp[index][target] = 1;
+        if(take == 1 || notTake == 1){
+            dp[index][target] = 1;
         }else{
-             dp[index][target] = 0;
+            dp[index][target] = 0;
         }
         
-        return  dp[index][target] == 1;
+        return dp[index][target];
     }
 }
