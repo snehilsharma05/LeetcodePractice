@@ -9,34 +9,36 @@ class Solution {
             return false;
         }else{
             int n = nums.length;
-             int[][] dp = new int[n][sum/2+1];
+             int[] prev = new int[sum/2+1];
             // for(int[] row:dp){
             //     Arrays.fill(row,-1);
             // }
             
-            for(int index = 0;index<n;index++){
-                dp[index][0] = 1;
-            }
+            
+                prev[0] = 1;
+            
             
             for(int target=1;target<=sum/2;target++){
-                dp[0][target] = nums[0] == target ? 1:0;
+                prev[target] = nums[0] == target ? 1:0;
             }
             
             for(int index=1;index<n;index++){
+                int[] curr = new int[sum/2+1];
                 for(int target=1;target<=sum/2;target++){
-                    int notTake = dp[index-1][target];
+                    int notTake = prev[target];
                     int take = 0;
                     if(nums[index]<=target){
-                        take = dp[index-1][target-nums[index]];
+                        take = prev[target-nums[index]];
                     }
                     if(take == 1 || notTake == 1){
-                        dp[index][target] = 1;
+                        curr[target] = 1;
                     }else{
-                        dp[index][target] = 0;
+                        curr[target] = 0;
                     }
                 }
+                prev = curr;
             }
-            return dp[n-1][sum/2] == 1;
+            return prev[sum/2] == 1;
             //return subsetSum(n-1,sum/2,nums,dp) == 1;
         }
     }
