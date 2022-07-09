@@ -1,64 +1,44 @@
 class Solution {
-    int MAX = 100000000;
-
+    private static final int MAX = (int)1e9;
     public int minCost(int[] houses, int[][] cost, int m, int n, int target) {
-        int[][][] dp = new int[m][n][target + 1];
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j)
-                Arrays.fill(dp[i][j], -1);
+        int[][][] dp = new int[m+1][target+1][n+1];
+        for(int i=0;i<=m;i++){
+            for(int j=0;j<=target;j++){
+                for(int k=0;k<=n;k++){
+                    dp[i][j][k] = -1;
+                }
+            }
         }
-
-        int ans = paintRecursively(houses, cost, m, n, target, 0, 0, -1, dp);
-        if (ans == MAX) {
-            return -1;
-        }
-        return ans;
+        int ans = dfs(0,target,0,houses,cost,n,dp);
+        return ans == MAX ? -1 : ans;
     }
-
-    //houseToBePainted = current house to be painted
-    //currentTarget = number of neighborhoods painted till now
-    //lastNbhColor = last neighbours color
-    public int paintRecursively(int[] houses, int[][] cost, int m, int n, int target,
-                                int houseToBePainted, // Dp state
-                                int currentTarget, // Dp state
-                                int lastNbhColor, // Dp state
-                                int[][][] dp
-    ) {
-        if (houseToBePainted == m) {
-            if (currentTarget == target) return 0;
+    
+    private int dfs(int index,int target,int lastColor,int[] houses,int[][] cost,int n,int[][][] dp){
+        if(target < 0){
             return MAX;
         }
-        if (currentTarget == target + 1) return MAX;
-        if (lastNbhColor != -1) {
-            if (dp[houseToBePainted][lastNbhColor][currentTarget] != -1) {
-                return dp[houseToBePainted][lastNbhColor][currentTarget];
-            }
+        
+        if(index>=houses.length){
+            return target == 0 ? 0 : MAX;
         }
-        int minCost = MAX;
-        //Step 1: Choose a paint color
-        for (int currentColor = 0; currentColor < n; ++currentColor) {
-            // Do we even need to paint? Or the house is already painted with color that we chose.
-            boolean isFree = false;
-            if (houses[houseToBePainted] != 0) {
-                //Note: If house is already painted with a different color than the one which we are using, stop right away, since we cannot override a paint.
-                if (houses[houseToBePainted] != currentColor + 1)
-                    continue;
-                else // No need to pay to paint this color, it's already painted!
-                    isFree = true;
-            }
-            //Step 2: Are we using a new paint that was not same as the last one?
-            //Step 2A: If yes, we will create a new neighborhood from here 
-            if (currentColor != lastNbhColor) {
-                minCost = Math.min(minCost, paintRecursively(houses, cost, m, n, target, houseToBePainted + 1, currentTarget + 1, currentColor, dp) + ((isFree) ? 0 : cost[houseToBePainted][currentColor]));
-
-            } else { // Step2B: If no, we will continue with previous neighborhood 
-                minCost = Math.min(minCost, paintRecursively(houses, cost, m, n, target, houseToBePainted + 1, currentTarget, currentColor, dp) + ((isFree) ? 0 : cost[houseToBePainted][currentColor]));
-            }
+        
+        if(dp[index][target][lastColor] != -1){
+            return dp[index][target][lastColor];
         }
-        if (lastNbhColor != -1) {
-            dp[houseToBePainted][lastNbhColor][currentTarget] = minCost;
+        
+        if(houses[index] != 0){ //already colored house
+            if(houses[index] != lastColor){
+                target--;
+            }
+            
+            return dfs(index+1,target,houses[index],houses,cost,n,dp);
         }
-        return minCost;
+        
+        int ans = MAX;
+        
+        for(int color=1;color<=n;color++){
+            ans = Math.min(ans,cost[index][color-1] + dfs(index+1,color != lastColor ? target-1 : target,color,houses,cost,n,dp));
+        }
+        return dp[index][target][lastColor] = ans;
     }
-
 }
