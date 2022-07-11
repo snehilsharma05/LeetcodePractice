@@ -25,9 +25,9 @@ class Solution {
         
         while(!q.isEmpty()){
             int n = q.size();
-            while(n-- > 0){
+            for(int count = 1;count<=n;count++){
                 TreeNode curr = q.poll();
-                if(n == 0){
+                if(count == n){
                     ans.add(curr.val);
                 }
                 
