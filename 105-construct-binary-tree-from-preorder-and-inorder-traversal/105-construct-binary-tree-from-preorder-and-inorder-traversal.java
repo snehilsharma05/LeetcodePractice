@@ -18,27 +18,25 @@ class Solution {
         int index = 0;
     }
     public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        Index index = new Index();
         Map<Integer,Integer> inMap = new HashMap<>();
-        for(int i=0;i<inorder.length;i++){
+        for(int i=0;i<n;i++){
             inMap.put(inorder[i],i);
         }
         
-        int n = inorder.length;
-        Index index = new Index();
-        return buildTree(preorder,index,0,n-1,inMap);
+        return buildTree(0,n-1,preorder,index,inMap);
     }
     
-    private TreeNode buildTree(int[] preorder,Index index,int low,int high,Map<Integer,Integer> inMap){
-        if(low>high || index.index>=preorder.length){
+    private TreeNode buildTree(int start,int end,int[] preorder,Index index,Map<Integer,Integer> inMap){
+        if(start>end || index.index>=preorder.length){
             return null;
         }
         
         TreeNode node = new TreeNode(preorder[index.index++]);
-        
         int indexInInorder = inMap.get(node.val);
-        node.left = buildTree(preorder,index,low,indexInInorder-1,inMap);
-        node.right = buildTree(preorder,index,indexInInorder+1,high,inMap);
-        
+        node.left = buildTree(start,indexInInorder-1,preorder,index,inMap);
+        node.right = buildTree(indexInInorder+1,end,preorder,index,inMap);
         return node;
     }
 }
