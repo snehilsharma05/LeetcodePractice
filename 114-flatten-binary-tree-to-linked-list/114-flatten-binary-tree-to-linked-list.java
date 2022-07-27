@@ -14,29 +14,19 @@
  * }
  */
 class Solution {
-    private class Prev{
-        TreeNode prev = null;
-    }
+    private TreeNode prev = null;
     public void flatten(TreeNode root) {
-        if(root == null){
-            return;
-        }
-        
-        Prev prev = new Prev();
-        flattenHelper(root,prev);
+        flattenHelper(root);
     }
-    
-    private void flattenHelper(TreeNode root, Prev prev){
+    private void flattenHelper(TreeNode root){
         if(root == null){
             return;
         }
         
-        flattenHelper(root.right,prev);
-        flattenHelper(root.left,prev);
-        
-        root.right = prev.prev;
+        flattenHelper(root.right);
+        flattenHelper(root.left);
+        root.right = prev;
         root.left = null;
-        prev.prev = root;
+        prev = root;
     }
-        
 }
