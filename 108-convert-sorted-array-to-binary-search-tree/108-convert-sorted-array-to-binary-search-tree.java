@@ -18,15 +18,15 @@ class Solution {
         return formTree(nums,0,nums.length-1);
     }
     
-    private TreeNode formTree(int[] nums,int low,int high){
-        if(low>high){
+    private TreeNode formTree(int[] nums,int start,int end){
+        if(start>end){
             return null;
         }
         
-        int mid = (low+high)>>1;
+        int mid = (start+end)>>1;
         TreeNode node = new TreeNode(nums[mid]);
-        node.left = formTree(nums,low,mid-1);
-        node.right = formTree(nums,mid+1,high);
+        node.left = formTree(nums,start,mid-1);
+        node.right = formTree(nums,mid+1,end);
         return node;
     }
 }
