@@ -1,4 +1,6 @@
 class Solution {
+    //[[1,4],[4,4],[2,2],[3,4],[1,1]]
+    // Output:- 4
     public int maxEvents(int[][] events) {
         int attended = 0;
         Arrays.sort(events,(e1,e2)->e1[0] - e2[0]); //sort based on start time
