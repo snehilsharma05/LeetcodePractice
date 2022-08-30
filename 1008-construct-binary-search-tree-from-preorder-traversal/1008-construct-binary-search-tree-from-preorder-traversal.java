@@ -18,21 +18,22 @@ class Solution {
         int index = 0;
     }
     public TreeNode bstFromPreorder(int[] preorder) {
+        int n = preorder.length;
         Index index = new Index();
-        return buildTree(index,preorder,Integer.MIN_VALUE,Integer.MAX_VALUE);
+        return formTree(index,Integer.MIN_VALUE,Integer.MAX_VALUE,preorder);
     }
     
-    private TreeNode buildTree(Index index,int[] preorder,int min,int max){
-        if(index.index>=preorder.length){
+    private TreeNode formTree(Index index, int min,int max,int[] preorder){
+        if(index.index >= preorder.length){
             return null;
         }
         
-        TreeNode curr = null;
+        TreeNode node = null;
         if(preorder[index.index]>min && preorder[index.index]<max){
-            curr = new TreeNode(preorder[index.index++]);
-            curr.left = buildTree(index,preorder,min,curr.val);
-            curr.right = buildTree(index,preorder,curr.val,max);
+            node = new TreeNode(preorder[index.index++]);
+            node.left = formTree(index,min,node.val,preorder);
+            node.right = formTree(index,node.val,max,preorder);
         }
-        return curr;
+        return node;
     }
 }
