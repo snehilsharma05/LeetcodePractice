@@ -1,4 +1,4 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -28,34 +28,37 @@ class GFG {
                 System.out.println("0");
         }
     }
-}// } Driver Code Ends
+}
+// } Driver Code Ends
 
 
 class Solution {
     // Function to detect cycle in an undirected graph.
-    public boolean isCycle(int N, ArrayList<ArrayList<Integer>> adj) {
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
         // Code here
-        boolean[] visited = new boolean[N];
-        for(int v=0;v<N;v++){
-            if(!visited[v]){
-                if(dfs(v,-1,adj,visited)){
-                    return true;
-                }
+        boolean[] visited = new boolean[V];
+        for(int node = 0;node<V;node++){
+            if(!visited[node] && isCyclic(node, adj, visited)){
+                return true;
             }
         }
         return false;
     }
     
-    private boolean dfs(int node,int parent, ArrayList<ArrayList<Integer>> adj,boolean[] visited){
-        
-        visited[node] = true;
-        for(int nbr:adj.get(node)){
-            if(!visited[nbr]){
-                if(dfs(nbr,node,adj,visited)){
-                    return true;
-                }
-            }else if(nbr != parent){
+    private boolean isCyclic(int node, ArrayList<ArrayList<Integer>> adj, boolean[] visited){
+        Queue<Integer> q = new LinkedList<>();
+        q.add(node);
+        while(!q.isEmpty()){
+            int curr = q.poll();
+            if(visited[curr]){
                 return true;
+            }
+            
+            visited[curr] = true;
+            for(int nbr:adj.get(curr)){
+                if(!visited[nbr]){
+                    q.add(nbr);
+                }
             }
         }
         return false;
