@@ -28,24 +28,24 @@ class Solution
     //order using Counting Sort.
     public static String countSort(String arr)
     {
+        // code here
+        int n = arr.length();
         int[] freq = new int[26];
-        for(int i =0;i<arr.length(); i++){
+        for(int i=0;i<n;i++){
             char ch = arr.charAt(i);
             freq[ch-'a']++;
         }
         
-        for(int i=1;i<freq.length;i++){
+        for(int i=1;i<26;i++){
             freq[i] += freq[i-1];
         }
         
-        char[] ans = new char[arr.length()];
-        for(int i=arr.length()-1;i>=0;i--){
+        char[] ans = new char[n];
+        for(int i=n-1;i>=0;i--){
             char ch = arr.charAt(i);
-            int index = freq[ch-'a']-1;
+            ans[freq[ch-'a'] - 1] = ch;
             freq[ch-'a']--;
-            ans[index] = arr.charAt(i);
         }
-        
         return new String(ans);
     }
 }
